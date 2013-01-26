@@ -19,6 +19,7 @@ object Dish {
   var cells: Set[Tuple2[Int, Int]] = Set()  
   spawn()
 
+
   def spawn() = {
     // One time call to randomly populate the Dish.cells value with random Tuple2[Int,Int]'s
     while ( start_count != cells.size ) {
@@ -27,6 +28,36 @@ object Dish {
       cells = cells ++ Set((x, y)) 
     }
   }
+
+  def create_potentials() = {
+    
+    // potentials = cells ++ cells.map ( cell => 
+    //   Set((cell._1 + 1, cell._2 + 1),
+    //   (cell._1 - 1, cell._2 + 1),
+    //   (cell._1, cell._2 + 1),
+    //   (cell._1 + 1, cell._2),
+    //   (cell._1 - 1, cell._2),
+    //   (cell._1, cell._2),
+    //   (cell._1 + 1, cell._2 - 1),
+    //   (cell._1 - 1, cell._2 - 1),
+    //   (cell._1, cell._2 - 1))
+    // )
+  }
+
+  // def count_neighbors(cell: Tuple2[Int, Int]) = {
+  //   cells.map ()
+
+  // }
+
+// def count_neighbors(self, cellA, passed_set):
+//   c = 0
+//   xA, yA = cellA
+//   for cellB in iter(passed_set):
+//       if cellA == cellB: continue
+//       xB, yB = cellB
+//       if abs(xB - xA) <= 1 and abs(yB - yA) <= 1:
+//           c += 1
+//   return c
 
 
 }
