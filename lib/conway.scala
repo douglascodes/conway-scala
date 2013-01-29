@@ -29,35 +29,48 @@ object Dish {
     }
   }
 
-  def create_potentials() = {
-    
-    // potentials = cells ++ cells.map ( cell => 
-    //   Set((cell._1 + 1, cell._2 + 1),
-    //   (cell._1 - 1, cell._2 + 1),
-    //   (cell._1, cell._2 + 1),
-    //   (cell._1 + 1, cell._2),
-    //   (cell._1 - 1, cell._2),
-    //   (cell._1, cell._2),
-    //   (cell._1 + 1, cell._2 - 1),
-    //   (cell._1 - 1, cell._2 - 1),
-    //   (cell._1, cell._2 - 1))
-    // )
+  def loop_generations() = {
+    create_potentials()
+    generate_second_gen()
+    println(cells)
   }
 
-  // def count_neighbors(cell: Tuple2[Int, Int]) = {
-  //   cells.map ()
+  def create_potentials() = {
+    var temp_potentials: Set[Set[Tuple2[Int, Int]]] = Set()
+    temp_potentials = cells.map ( cell => 
+      Set((cell._1 + 1, cell._2 + 1),
+    (cell._1 - 1, cell._2 + 1),
+    (cell._1, cell._2 + 1),
+    (cell._1 + 1, cell._2),
+    (cell._1 - 1, cell._2),
+    (cell._1, cell._2),
+    (cell._1 + 1, cell._2 - 1),
+    (cell._1 - 1, cell._2 - 1),
+    (cell._1, cell._2 - 1)))
+    potentials = temp_potentials.flatten
+  }
 
-  // }
+  def generate_second_gen() = {
+    cells = potentials.filter ( cell => 
+      survives(neighbors = count_neighbors(cell), cell)
+    )
+  }
 
-// def count_neighbors(self, cellA, passed_set):
-//   c = 0
-//   xA, yA = cellA
-//   for cellB in iter(passed_set):
-//       if cellA == cellB: continue
-//       xB, yB = cellB
-//       if abs(xB - xA) <= 1 and abs(yB - yA) <= 1:
-//           c += 1
-//   return c
+  def survives(neighbors: Int, cell: Tuple2[Int, Int]): Boolean = ( neighbors, cells.contains(cell) ) match {
+    case ( 3, _ ) => true
+    case ( 2, true ) => true
+    case _ => false
+  }
 
+  def count_neighbors(cell: Tuple2[Int, Int]): Int = {
+    cells.count ( test => isA_neighbor(test = test, cell = cell))
+  }
 
+  def isA_neighbor(test: Tuple2[Int,Int], cell: Tuple2[Int, Int]): Boolean = ((cell._1 - test._1).abs, (cell._2 - test._2).abs) match  {
+    case (1, 1) => true
+    case (0, 1) => true
+    case (1, 0) => true
+    case (0, 0) => false
+    case _ => false
+  }
 }
