@@ -1,6 +1,3 @@
-import scalaz._
-import Scalaz._
-import effects._
 import javax.swing._
 import java.awt.event._
 import java.awt._
