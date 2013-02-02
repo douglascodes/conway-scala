@@ -42,6 +42,7 @@ object Dish {
       generate_second_gen()       // Filters the potentials list to keep current cells with 2 or 3 neighbors and new cells with
                                   // Exactly three neighbors. NEW cells are ones that exist in potential but NOT current cells. 
       generation += 1
+      println("Generation", generation)
   }
 
   def create_potentials() = {     // Creates a set of sets. Each subSet includes the cell and each neighbor in 8 directions.
@@ -91,7 +92,6 @@ object ConwayWindow {     // Sets the main display object
       Dish.loop_generations()}    // Runs the next generation of cells from the current set. 
   } 
 
-
   class MyDrawPanel extends JPanel { 
     override def paintComponent(g: Graphics) {      
       g.setColor(Color.black)                             // Redraws the full field with black
@@ -110,7 +110,6 @@ object ConwayWindow {     // Sets the main display object
     }  
   }
 
-
     val pbl = new PauseButtonListener       // Sets the listening object for the pause button. It alternates between stoppend/going.
     val frame: JFrame = new JFrame()        
     val start_button: JButton = new JButton("Pause / Continue")
@@ -122,5 +121,4 @@ object ConwayWindow {     // Sets the main display object
     frame.setSize(Dish.win_limit+30, Dish.win_limit+70) 
     frame.setVisible(true)
     start_button.addActionListener(pbl)
-
 }
