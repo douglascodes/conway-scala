@@ -4,18 +4,17 @@ import java.awt._
 
 
 object Dish {
-//     """Petry dish where all things happen. More commenting forthcoming.
-//     Check the main_test.py file for a better understanding of what is going on.
-//     http://en.wikipedia.org/wiki/Conway's_Game_of_Life
-//     ^ The rules. This first version is just to be able to use Scala. A 2nd version 
-//     will seek to utilize the best techniques in Scala.
-//     """
-  val measure: Double = 8.5                         // A simple  
+
+  // The Dish (Petry Dish) simulates a hypothetical cell/bacteria environment limited by the visual field constraints. Each cell is a combination of
+  // X,Y coordinates originating from the top left of the screen. It then generates a list of Potentials cells, and then combines the two lists
+  // with the rules of the Conways Game of Life with the original B3/S23 rules. http://en.wikipedia.org/wiki/Conway's_Game_of_Life
+
+  val measure: Double = 8.5                         // A simple value for determining the rest of the restraints
   val limit: Int = (measure * measure).toInt        // Size of cell field 
   val max_cells: Int = (limit * limit)              // Number of possible cells
   val vigor: Double = (30.0 / 100.0)                // Percentage of cell field that will be populated
   val start_count: Int = (max_cells * vigor).toInt  // Number of cells to begin with
-  val offset: Int = 5                              // Size of boxes to be drawn, and multiply limit for window size
+  val offset: Int = 5                               // Size of boxes to be drawn, and multiply limit for window size
   val win_limit: Int = offset * limit               // Size for X, Y sizes for the window to be drawn
 
   var generation: Int = 0                           // Simple counter for keeping track of current generation
@@ -37,13 +36,16 @@ object Dish {
     }
   }
 
-  def loop_generations() = {
+  def loop_generations(): Unit = {
+      while ( pause)  { return}
       create_potentials()         // Runs the create_potentials method
       generate_second_gen()       // Filters the potentials list to keep current cells with 2 or 3 neighbors and new cells with
                                   // Exactly three neighbors. NEW cells are ones that exist in potential but NOT current cells. 
+      generation += 1
   }
 
-  def create_potentials() = {
+  def create_potentials() = {     // Creates a set of sets. Each subSet includes the cell and each neighbor in 8 directions.
+
     temp_potentials = cells.map ( cell => 
       Set((cell._1 + 1, cell._2 + 1),
     (cell._1 - 1, cell._2 + 1),
@@ -82,35 +84,35 @@ object Dish {
   }
 }
 
-class ConwayWindow {
-  def main() {
-    val w = new ConwayWindow
+object ConwayWindow {     // Sets the main display object
+  def main() {            // Uses this as the cycling method throughout the main program. 
     while ( true ) {
-      w.mdp.repaint()
-      Dish.loop_generations()}
-  }
+      ConwayWindow.mdp.repaint()  // Clears the display and repaints with the current Dish.cells addresses
+      Dish.loop_generations()}    // Runs the next generation of cells from the current set. 
+  } 
 
 
   class MyDrawPanel extends JPanel { 
     override def paintComponent(g: Graphics) {      
-      g.setColor(Color.black)    // Written in Ruby please convert to a looping Scala paint method
-      g.fillRect(0,0, this.getWidth(), this.getHeight())
+      g.setColor(Color.black)                             // Redraws the full field with black
+      g.fillRect(0,0, this.getWidth(), this.getHeight())  // From top left to bottom right
 
-      g.setColor(Color.blue)    // Written in Ruby please convert to a looping Scala paint method
-      Dish.cells.foreach ( 
+      g.setColor(Color.blue)                              // Cells arae blue
+      Dish.cells.foreach (                                // Each cell Tuple2(int, int), corresponds to a pixel address
         x => g.fillRect(x._1*Dish.offset+10,x._2*Dish.offset+5, Dish.offset, Dish.offset))
     }
   }
 
   class PauseButtonListener extends ActionListener {
     def actionPerformed(event: ActionEvent): Unit = {
-      Dish.pause = !Dish.pause
+      Dish.pause = !Dish.pause    // Changes the value of Pause in Dish to the opposite. Unpaused becomes paused... vice versa.
+                                  // Does not loop generations if the condition is paused.
     }  
   }
 
 
-    val pbl = new PauseButtonListener
-    val frame: JFrame = new JFrame()
+    val pbl = new PauseButtonListener       // Sets the listening object for the pause button. It alternates between stoppend/going.
+    val frame: JFrame = new JFrame()        
     val start_button: JButton = new JButton("Pause / Continue")
     val mdp = new this.MyDrawPanel
 
