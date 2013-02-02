@@ -15,7 +15,7 @@ object Dish {
   val max_cells: Int = (limit * limit)              // Number of possible cells
   val vigor: Double = (30.0 / 100.0)                // Percentage of cell field that will be populated
   val start_count: Int = (max_cells * vigor).toInt  // Number of cells to begin with
-  val offset: Int = 10                              // Size of boxes to be drawn, and multiply limit for window size
+  val offset: Int = 5                              // Size of boxes to be drawn, and multiply limit for window size
   val win_limit: Int = offset * limit               // Size for X, Y sizes for the window to be drawn
 
   var generation: Int = 0                           // Simple counter for keeping track of current generation
@@ -83,22 +83,42 @@ object Dish {
 }
 
 class ConwayWindow {
-    class PauseButtonListener extends ActionListener {
-      def actionPerformed(event: ActionEvent): Unit = {
-        start_button.setText("Pushed")
-      }  
+  def main() {
+    val w = new ConwayWindow
+    while ( true ) {
+      w.mdp.repaint()
+      Dish.loop_generations()}
+  }
+
+
+  class MyDrawPanel extends JPanel { 
+    override def paintComponent(g: Graphics) {      
+      g.setColor(Color.black)    // Written in Ruby please convert to a looping Scala paint method
+      g.fillRect(0,0, this.getWidth(), this.getHeight())
+
+      g.setColor(Color.blue)    // Written in Ruby please convert to a looping Scala paint method
+      Dish.cells.foreach ( 
+        x => g.fillRect(x._1*Dish.offset+10,x._2*Dish.offset+5, Dish.offset, Dish.offset))
     }
+  }
+
+  class PauseButtonListener extends ActionListener {
+    def actionPerformed(event: ActionEvent): Unit = {
+      Dish.pause = !Dish.pause
+    }  
+  }
+
 
     val pbl = new PauseButtonListener
     val frame: JFrame = new JFrame()
     val start_button: JButton = new JButton("Pause / Continue")
-    val pause: Boolean = Dish.pause
+    val mdp = new this.MyDrawPanel
 
-    frame.getContentPane().add(BorderLayout.NORTH, start_button)
+    frame.getContentPane().add(BorderLayout.SOUTH, start_button)
+    frame.getContentPane().add(BorderLayout.CENTER, mdp)
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    frame.setSize(Dish.win_limit, Dish.win_limit) 
+    frame.setSize(Dish.win_limit+30, Dish.win_limit+70) 
     frame.setVisible(true)
-    // frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE)
     start_button.addActionListener(pbl)
-    
+
 }
