@@ -4,7 +4,7 @@ import sbt.Keys._
 object Build extends Build {
 
   lazy val conway = Project(
-    "conway's GOL simulator",
+    "conway_GOL_simulator",
     file("."),
     settings = 
       Defaults.defaultSettings ++

@@ -1,4 +1,4 @@
-name := "conway GOL in scala"
+name := "conway_GOL_in_scala"
 
 version := "1.0"
 

@@ -33,20 +33,4 @@ class DishSpec extends Specification {
 		}
 	}
 
-
-//   "Creating a Time" should {
-//   "throw an Illegal Argument" in {
-//     Time(minutes = 60) must throwAn[IAE]
-//   }
-//   "throw an Illegal Argument" in {
-//     Time(hours = 25) must throwAn[IAE]
-//   }
-
-//   "Default to zero for minutes and hours" in {
-//     Time().minutes must beEqualTo(0)
-//     Time().hours must beEqualTo(0)
-//   }
-// }
-
-
 }
