@@ -2,3 +2,6 @@ main.txt
 target/
 classes/
 lib_managed/
+com/
+*.class
+*.
